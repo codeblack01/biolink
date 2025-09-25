@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio Link - Conectando Biomassa Sustentável</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --verde-primario: #2E8B57;
+            --verde-secundario: #3CB371;
+            --azul-primario: #1E90FF;
+            --azul-secundario: #87CEEB;
+            --branco: #FFFFFF;
+            --cinza-claro: #F5F5F5;
+            --cinza-escuro: #333333;
+            --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--cinza-claro);
+            color: var(--cinza-escuro);
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .app-container {
+            max-width: 100%;
+            min-height: 100vh;
+            background-color: var(--branco);
+            position: relative;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--verde-primario), var(--azul-primario));
+            color: var(--branco);
+            padding: 15px;
+            box-shadow: var(--sombra);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+        
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .sponsor-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        
+        /* Navegação inferior */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--branco);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--cinza-escuro);
+            text-decoration: none;
+        }
+        
+        .nav-item.active {
+            color: var(--verde-primario);
+        }
+        
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+        }
+        
+        /* Conteúdo principal */
+        .main-content {
+            padding: 15px;
+            padding-bottom: 70px; /* Espaço para a navegação inferior */
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(46, 139, 87, 0.9), rgba(30, 144, 255, 0.9));
+            color: var(--branco);
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .hero h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .hero p {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--branco);
+            color: var(--verde-primario);
+        }
+        
+        /* Cards de funcionalidades */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card {
+            background-color: var(--branco);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: var(--sombra);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .feature-icon {
+            font-size: 1.8rem;
+            color: var(--verde-primario);
+            margin-bottom: 10px;
+        }
+        
+        .feature-card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: var(--verde-primario);
+        }
+        
+        .feature-card p {
+            font-size: 0.8rem;
+            color: var(--cinza-escuro);
+        }
+        
+        /* Seções */
+        .section {
+            background-color: var(--branco);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: var(--sombra);
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--verde-primario);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.3rem;
+        }
+        
+        /* Mapa */
+        .map-container {
+            height: 200px;
+            background-color: var(--azul-secundario);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cinza-escuro);
+            margin-bottom: 15px;
+        }
+        
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--verde-primario), var(--azul-primario));
+            color: var(--branco);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+        }
+        
+        /* Marketplace */
+        .marketplace-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .market-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid var(--cinza-claro);
+        }
+        
+        .item-icon {
+            font-size: 1.5rem;
+            color: var(--verde-primario);
+        }
+        
+        .item-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+        
+        .item-info p {
+            font-size: 0.8rem;
+            color: var(--cinza-escuro);
+        }
+        
+        /* Gamificação */
+        .badges {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        
+        .badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--verde-primario), var(--azul-primario));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--branco);
+            font-size: 1.5rem;
+            box-shadow: var(--sombra);
+        }
+        
+        /* Sobre */
+        .about-content {
+            text-align: center;
+            padding: 10px 0;
+        }
+        
+        .about-content h3 {
+            color: var(--verde-primario);
+            margin-bottom: 10px;
+        }
+        
+        .about-content p {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .location {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: var(--cinza-escuro);
+        }
+        
+        /* Formulários */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .user-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .user-type {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .user-type.active {
+            border-color: var(--verde-primario);
+            background-color: rgba(46, 139, 87, 0.1);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: var(--branco);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .modal-title {
+            font-size: 1.1rem;
+            color: var(--verde-primario);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        /* Responsividade para tablets */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 768px;
+                margin: 0 auto;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-leaf logo-icon"></i>
+                    <div class="logo-text">Bio Link</div>
+                </div>
+                <div class="sponsor-badge">Patrocinado por Time Up</div>
+            </div>
+        </header>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Página Inicial -->
+            <section id="home" class="page active">
+                <div class="hero">
+                    <h1>Conectando Biomassa a Energia Sustentável</h1>
+                    <p>Uma solução inovadora para transformar resíduos em recursos</p>
+                    <button class="btn btn-primary" id="get-started">Começar Agora</button>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-map-marked-alt feature-icon"></i>
+                        <h3>Mapa Interativo</h3>
+                        <p>Encontre pontos de biomassa próximos a você</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shopping-cart feature-icon"></i>
+                        <h3>Marketplace</h3>
+                        <p>Compre e venda biomassa sustentável</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Simulador</h3>
+                        <p>Calcule impacto ambiental e financeiro</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trophy feature-icon"></i>
+                        <h3>Gamificação</h3>
+                        <p>Ganhe recompensas por suas ações sustentáveis</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-seedling"></i> Impacto Recente</h2>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-label">Resíduos Transformados</div>
+                            <div class="stat-value">245 t</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">CO₂ Reduzido</div>
+                            <div class="stat-value">458 t</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Página do Mapa -->
+            <section id="map" class="page">
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-map-marked-alt"></i> Mapa de Biomassa</h2>
+                    <div class="map-container">
+                        <p>Mapa interativo com pontos de biomassa</p>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">Filtrar por Tipo</button>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-list"></i> Pontos Próximos</h2>
+                    <div class="marketplace-items">
+                        <div class="market-item">
+                            <i class="fas fa-industry item-icon"></i>
+                            <div class="item-info">
+                                <h4>Indústria Alimentícia</h4>
+                                <p>2km • Resíduos orgânicos • 5t disponíveis</p>
+                            </div>
+                        </div>
+                        <div class="market-item">
+                            <i class="fas fa-tractor item-icon"></i>
+                            <div class="item-info">
+                                <h4>Fazenda Sustentável</h4>
+                                <p>5km • Biomassa agrícola • 10t disponíveis</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Página do Marketplace -->
+            <section id="marketplace" class="page">
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Marketplace</h2>
+                    <div class="marketplace-items">
+                        <div class="market-item">
+                            <i class="fas fa-apple-alt item-icon"></i>
+                            <div class="item-info">
+                                <h4>Resíduos de Frutas</h4>
+                                <p>3t • R$ 150/t • Disponível há 2 dias</p>
+                            </div>
+                        </div>
+                        <div class="market-item">
+                            <i class="fas fa-tree item-icon"></i>
+                            <div class="item-info">
+                                <h4>Biomassa Florestal</h4>
+                                <p>15t • R$ 200/t • Disponível há 1 dia</p>
+                            </div>
+                        </div>
+                        <div class="market-item">
+                            <i class="fas fa-utensils item-icon"></i>
+                            <div class="item-info">
+                                <h4>Resíduos de Restaurante</h4>
+                                <p>1t • R$ 100/t • Disponível hoje</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 15px;">Anunciar Biomassa</button>
+                </div>
+            </section>
+
+            <!-- Página de Simulação -->
+            <section id="simulator" class="page">
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-calculator"></i> Simulador de Impacto</h2>
+                    <div class="form-group">
+                        <label for="biomass-type">Tipo de Biomassa</label>
+                        <select class="form-control" id="biomass-type">
+                            <option>Resíduos Agrícolas</option>
+                            <option>Resíduos Industriais</option>
+                            <option>Resíduos Urbanos</option>
+                            <option>Biomassa Florestal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="biomass-quantity">Quantidade (toneladas)</label>
+                        <input type="number" class="form-control" id="biomass-quantity" value="5">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;" id="calculate-impact">Calcular Impacto</button>
+                    
+                    <div id="impact-results" style="display: none; margin-top: 20px;">
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-label">Redução de CO₂</div>
+                                <div class="stat-value" id="co2-reduction">0 t</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Renda Gerada</div>
+                                <div class="stat-value" id="revenue-generated">R$ 0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Página de Perfil -->
+            <section id="profile" class="page">
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-user"></i> Meu Perfil</h2>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--verde-primario), var(--azul-primario)); display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 style="margin-top: 10px;">Usuário Bio Link</h3>
+                        <p>Produtor de Biomassa</p>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-label">Minhas Transações</div>
+                            <div class="stat-value">12</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Meu Impacto CO₂</div>
+                            <div class="stat-value">45 t</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-trophy"></i> Conquistas</h2>
+                    <div class="badges">
+                        <div class="badge">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title"><i class="fas fa-info-circle"></i> Sobre o Bio Link</h2>
+                    <div class="about-content">
+                        <h3>Projeto Experimental</h3>
+                        <p>O Bio Link é um protótipo acadêmico desenvolvido em Videira, Santa Catarina, com o objetivo de conectar produtores de biomassa a empresas de energia sustentável.</p>
+                        <p>Patrocinado pela <strong>Time Up</strong>, este projeto visa promover a economia circular e a sustentabilidade ambiental.</p>
+                        <div class="location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Videira, SC - Brasil</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Navegação Inferior -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" data-page="home">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Início</span>
+            </a>
+            <a href="#" class="nav-item" data-page="map">
+                <i class="fas fa-map nav-icon"></i>
+                <span>Mapa</span>
+            </a>
+            <a href="#" class="nav-item" data-page="marketplace">
+                <i class="fas fa-shopping-cart nav-icon"></i>
+                <span>Marketplace</span>
+            </a>
+            <a href="#" class="nav-item" data-page="simulator">
+                <i class="fas fa-calculator nav-icon"></i>
+                <span>Simulador</span>
+            </a>
+            <a href="#" class="nav-item" data-page="profile">
+                <i class="fas fa-user nav-icon"></i>
+                <span>Perfil</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Cadastro no Bio Link</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <p style="margin-bottom: 15px; font-size: 0.9rem;">Patrocinado por <strong>Time Up</strong></p>
+            
+            <div class="user-type-selector">
+                <div class="user-type active" data-type="producer">
+                    <i class="fas fa-industry" style="font-size: 1.5rem; margin-bottom: 5px;"></i>
+                    <div>Produtor</div>
+                </div>
+                <div class="user-type" data-type="buyer">
+                    <i class="fas fa-bolt" style="font-size: 1.5rem; margin-bottom: 5px;"></i>
+                    <div>Comprador</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Nome Completo</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control" id="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%;">Cadastrar</button>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.8rem;">Projeto experimental desenvolvido em Videira, SC</p>
+        </div>
+    </div>
+
+    <script>
+        // Navegação entre páginas
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remover classe active de todos os itens
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // Adicionar classe active ao item clicado
+                this.classList.add('active');
+                
+                // Esconder todas as páginas
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Mostrar a página correspondente
+                const pageId = this.getAttribute('data-page');
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+        
+        // Modal de cadastro
+        const registerModal = document.getElementById('register-modal');
+        const getStartedBtn = document.getElementById('get-started');
+        const closeModalBtn = document.querySelector('.close-modal');
+        
+        getStartedBtn.addEventListener('click', function() {
+            registerModal.classList.add('active');
+        });
+        
+        closeModalBtn.addEventListener('click', function() {
+            registerModal.classList.remove('active');
+        });
+        
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(e) {
+            if (e.target === registerModal) {
+                registerModal.classList.remove('active');
+            }
+        });
+        
+        // Seleção de tipo de usuário
+        document.querySelectorAll('.user-type').forEach(type => {
+            type.addEventListener('click', function() {
+                document.querySelectorAll('.user-type').forEach(t => {
+                    t.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+        
+        // Simulador de impacto
+        document.getElementById('calculate-impact').addEventListener('click', function() {
+            const quantity = document.getElementById('biomass-quantity').value;
+            const co2Reduction = quantity * 0.9; // Fator de redução de CO2 por tonelada
+            const revenue = quantity * 150; // Valor médio por tonelada
+            
+            document.getElementById('co2-reduction').textContent = co2Reduction.toFixed(1) + ' t';
+            document.getElementById('revenue-generated').textContent = 'R$ ' + revenue.toFixed(2);
+            
+            document.getElementById('impact-results').style.display = 'block';
+        });
+        
+        // Inicializar simulador com valores padrão
+        document.getElementById('calculate-impact').click();
+    </script>
+</body>
+</html>
