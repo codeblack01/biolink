@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio Link - Conectando Biomassa Sustentável</title>
+    <title>Bio Link - Biomassa Sustentável</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -59,6 +60,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
+            color: var(--branco);
         }
         
         .logo-icon {
@@ -121,6 +124,12 @@
         
         .page.active {
             display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         /* Hero Section */
@@ -229,6 +238,8 @@
             justify-content: center;
             color: var(--cinza-escuro);
             margin-bottom: 15px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%2387CEEB"/><path d="M50,10 L70,30 L80,20 L90,40 L60,70 L40,50 L20,70 L10,50 L30,30 Z" fill="%232E8B57" opacity="0.6"/><circle cx="50" cy="50" r="5" fill="%23FF6B6B"/><circle cx="70" cy="30" r="5" fill="%23FF6B6B"/><circle cx="30" cy="60" r="5" fill="%23FF6B6B"/></svg>');
+            background-size: cover;
         }
         
         /* Stats */
@@ -397,6 +408,8 @@
             padding: 20px;
             width: 90%;
             max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal-header {
@@ -433,18 +446,37 @@
             .stats {
                 grid-template-columns: repeat(4, 1fr);
             }
+            
+            .map-container {
+                height: 300px;
+            }
+        }
+        
+        /* HashRouter Simulation */
+        .route-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
+    <div class="route-indicator" id="routeIndicator">/#/</div>
+    
     <div class="app-container">
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <div class="logo">
+                <a href="#/" class="logo">
                     <i class="fas fa-leaf logo-icon"></i>
                     <div class="logo-text">Bio Link</div>
-                </div>
+                </a>
                 <div class="sponsor-badge">Patrocinado por Time Up</div>
             </div>
         </header>
@@ -452,7 +484,7 @@
         <!-- Conteúdo Principal -->
         <main class="main-content">
             <!-- Página Inicial -->
-            <section id="home" class="page active">
+            <section id="home-page" class="page active">
                 <div class="hero">
                     <h1>Conectando Biomassa a Energia Sustentável</h1>
                     <p>Uma solução inovadora para transformar resíduos em recursos</p>
@@ -493,16 +525,27 @@
                             <div class="stat-label">CO₂ Reduzido</div>
                             <div class="stat-value">458 t</div>
                         </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Transações</div>
+                            <div class="stat-value">87</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Economia</div>
+                            <div class="stat-value">R$ 145K</div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Página do Mapa -->
-            <section id="map" class="page">
+            <section id="map-page" class="page">
                 <div class="section">
                     <h2 class="section-title"><i class="fas fa-map-marked-alt"></i> Mapa de Biomassa</h2>
                     <div class="map-container">
-                        <p>Mapa interativo com pontos de biomassa</p>
+                        <div style="background: white; padding: 10px; border-radius: 5px;">
+                            <p>📍 Mapa interativo com pontos de biomassa</p>
+                            <small>Zoom: + - | Arraste para navegar</small>
+                        </div>
                     </div>
                     <button class="btn btn-primary" style="width: 100%;">Filtrar por Tipo</button>
                 </div>
@@ -524,12 +567,19 @@
                                 <p>5km • Biomassa agrícola • 10t disponíveis</p>
                             </div>
                         </div>
+                        <div class="market-item">
+                            <i class="fas fa-utensils item-icon"></i>
+                            <div class="item-info">
+                                <h4>Restaurante Verde</h4>
+                                <p>1km • Resíduos orgânicos • 2t disponíveis</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Página do Marketplace -->
-            <section id="marketplace" class="page">
+            <section id="marketplace-page" class="page">
                 <div class="section">
                     <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Marketplace</h2>
                     <div class="marketplace-items">
@@ -554,13 +604,20 @@
                                 <p>1t • R$ 100/t • Disponível hoje</p>
                             </div>
                         </div>
+                        <div class="market-item">
+                            <i class="fas fa-seedling item-icon"></i>
+                            <div class="item-info">
+                                <h4>Palha de Arroz</h4>
+                                <p>8t • R$ 120/t • Disponível há 3 dias</p>
+                            </div>
+                        </div>
                     </div>
                     <button class="btn btn-primary" style="width: 100%; margin-top: 15px;">Anunciar Biomassa</button>
                 </div>
             </section>
 
             <!-- Página de Simulação -->
-            <section id="simulator" class="page">
+            <section id="simulator-page" class="page">
                 <div class="section">
                     <h2 class="section-title"><i class="fas fa-calculator"></i> Simulador de Impacto</h2>
                     <div class="form-group">
@@ -574,7 +631,16 @@
                     </div>
                     <div class="form-group">
                         <label for="biomass-quantity">Quantidade (toneladas)</label>
-                        <input type="number" class="form-control" id="biomass-quantity" value="5">
+                        <input type="number" class="form-control" id="biomass-quantity" value="5" min="1" max="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Localização</label>
+                        <select class="form-control" id="location">
+                            <option>Videira, SC</option>
+                            <option>Chapecó, SC</option>
+                            <option>Joinville, SC</option>
+                            <option>Florianópolis, SC</option>
+                        </select>
                     </div>
                     <button class="btn btn-primary" style="width: 100%;" id="calculate-impact">Calcular Impacto</button>
                     
@@ -589,12 +655,15 @@
                                 <div class="stat-value" id="revenue-generated">R$ 0</div>
                             </div>
                         </div>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <p>💡 <strong>Equivalente a plantar <span id="trees-equivalent">0</span> árvores!</strong></p>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Página de Perfil -->
-            <section id="profile" class="page">
+            <section id="profile-page" class="page">
                 <div class="section">
                     <h2 class="section-title"><i class="fas fa-user"></i> Meu Perfil</h2>
                     <div style="text-align: center; margin-bottom: 20px;">
@@ -602,7 +671,7 @@
                             <i class="fas fa-user"></i>
                         </div>
                         <h3 style="margin-top: 10px;">Usuário Bio Link</h3>
-                        <p>Produtor de Biomassa</p>
+                        <p>Produtor de Biomassa • Videira, SC</p>
                     </div>
                     
                     <div class="stats">
@@ -614,19 +683,30 @@
                             <div class="stat-label">Meu Impacto CO₂</div>
                             <div class="stat-value">45 t</div>
                         </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Economia Gerada</div>
+                            <div class="stat-value">R$ 8.2K</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Nível</div>
+                            <div class="stat-value">3</div>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="section">
                     <h2 class="section-title"><i class="fas fa-trophy"></i> Conquistas</h2>
                     <div class="badges">
-                        <div class="badge">
+                        <div class="badge" title="Iniciante Verde">
                             <i class="fas fa-seedling"></i>
                         </div>
-                        <div class="badge">
+                        <div class="badge" title="Reciclador Expert">
                             <i class="fas fa-recycle"></i>
                         </div>
-                        <div class="badge">
+                        <div class="badge" title="Gerador de Energia">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="badge" title="Mestre em Sustentabilidade">
                             <i class="fas fa-leaf"></i>
                         </div>
                     </div>
@@ -636,8 +716,8 @@
                     <h2 class="section-title"><i class="fas fa-info-circle"></i> Sobre o Bio Link</h2>
                     <div class="about-content">
                         <h3>Projeto Experimental</h3>
-                        <p>O Bio Link é um protótipo acadêmico desenvolvido em Videira, Santa Catarina, com o objetivo de conectar produtores de biomassa a empresas de energia sustentável.</p>
-                        <p>Patrocinado pela <strong>Time Up</strong>, este projeto visa promover a economia circular e a sustentabilidade ambiental.</p>
+                        <p>O Bio Link é um protótipo acadêmico desenvolvido em <strong>Videira, Santa Catarina</strong>, com o objetivo de conectar produtores de biomassa a empresas de energia sustentável.</p>
+                        <p>Patrocinado pela <strong>TIME UP</strong>, este projeto visa promover a economia circular e a sustentabilidade ambiental.</p>
                         <div class="location">
                             <i class="fas fa-map-marker-alt"></i>
                             <span>Videira, SC - Brasil</span>
@@ -647,25 +727,25 @@
             </section>
         </main>
 
-        <!-- Navegação Inferior -->
+        <!-- Navegação Inferior (HashRouter Simulation) -->
         <nav class="bottom-nav">
-            <a href="#" class="nav-item active" data-page="home">
+            <a href="#/" class="nav-item active" data-page="home">
                 <i class="fas fa-home nav-icon"></i>
                 <span>Início</span>
             </a>
-            <a href="#" class="nav-item" data-page="map">
+            <a href="#/map" class="nav-item" data-page="map">
                 <i class="fas fa-map nav-icon"></i>
                 <span>Mapa</span>
             </a>
-            <a href="#" class="nav-item" data-page="marketplace">
+            <a href="#/marketplace" class="nav-item" data-page="marketplace">
                 <i class="fas fa-shopping-cart nav-icon"></i>
                 <span>Marketplace</span>
             </a>
-            <a href="#" class="nav-item" data-page="simulator">
+            <a href="#/simulator" class="nav-item" data-page="simulator">
                 <i class="fas fa-calculator nav-icon"></i>
                 <span>Simulador</span>
             </a>
-            <a href="#" class="nav-item" data-page="profile">
+            <a href="#/profile" class="nav-item" data-page="profile">
                 <i class="fas fa-user nav-icon"></i>
                 <span>Perfil</span>
             </a>
@@ -679,7 +759,7 @@
                 <h3 class="modal-title">Cadastro no Bio Link</h3>
                 <button class="close-modal">&times;</button>
             </div>
-            <p style="margin-bottom: 15px; font-size: 0.9rem;">Patrocinado por <strong>Time Up</strong></p>
+            <p style="margin-bottom: 15px; font-size: 0.9rem;">Patrocinado por <strong>TIME UP</strong></p>
             
             <div class="user-type-selector">
                 <div class="user-type active" data-type="producer">
@@ -694,15 +774,15 @@
             
             <div class="form-group">
                 <label for="name">Nome Completo</label>
-                <input type="text" class="form-control" id="name">
+                <input type="text" class="form-control" id="name" placeholder="Seu nome completo">
             </div>
             <div class="form-group">
                 <label for="email">E-mail</label>
-                <input type="email" class="form-control" id="email">
+                <input type="email" class="form-control" id="email" placeholder="seu@email.com">
             </div>
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" class="form-control" id="password">
+                <input type="password" class="form-control" id="password" placeholder="Mínimo 6 caracteres">
             </div>
             
             <button class="btn btn-primary" style="width: 100%;">Cadastrar</button>
@@ -711,30 +791,51 @@
     </div>
 
     <script>
+        // Sistema de Roteamento Simulado (HashRouter)
+        function showPage(pageId) {
+            // Esconder todas as páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostrar a página correspondente
+            const pageElement = document.getElementById(pageId + '-page');
+            if (pageElement) {
+                pageElement.classList.add('active');
+            } else {
+                document.getElementById('home-page').classList.add('active');
+            }
+            
+            // Atualizar navegação
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const activeNav = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+            
+            // Atualizar indicador de rota
+            document.getElementById('routeIndicator').textContent = `/#/${pageId === 'home' ? '' : pageId}`;
+        }
+
+        // Gerenciar mudanças de hash
+        function handleHashChange() {
+            const hash = window.location.hash.substring(2); // Remove '#/'
+            const page = hash || 'home';
+            showPage(page);
+        }
+
         // Navegação entre páginas
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
-                
-                // Remover classe active de todos os itens
-                document.querySelectorAll('.nav-item').forEach(nav => {
-                    nav.classList.remove('active');
-                });
-                
-                // Adicionar classe active ao item clicado
-                this.classList.add('active');
-                
-                // Esconder todas as páginas
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                
-                // Mostrar a página correspondente
-                const pageId = this.getAttribute('data-page');
-                document.getElementById(pageId).classList.add('active');
+                const page = this.getAttribute('data-page');
+                window.location.hash = `#/${page === 'home' ? '' : page}`;
             });
         });
-        
+
         // Modal de cadastro
         const registerModal = document.getElementById('register-modal');
         const getStartedBtn = document.getElementById('get-started');
@@ -767,15 +868,38 @@
         
         // Simulador de impacto
         document.getElementById('calculate-impact').addEventListener('click', function() {
-            const quantity = document.getElementById('biomass-quantity').value;
-            const co2Reduction = quantity * 0.9; // Fator de redução de CO2 por tonelada
-            const revenue = quantity * 150; // Valor médio por tonelada
+            const quantity = parseInt(document.getElementById('biomass-quantity').value) || 5;
+            const type = document.getElementById('biomass-type').value;
+            
+            // Fatores de cálculo baseados no tipo
+            let co2Factor = 0.9;
+            let revenueFactor = 150;
+            
+            if (type.includes('Industrial')) {
+                co2Factor = 1.2;
+                revenueFactor = 200;
+            } else if (type.includes('Florestal')) {
+                co2Factor = 1.5;
+                revenueFactor = 180;
+            } else if (type.includes('Urbano')) {
+                co2Factor = 0.7;
+                revenueFactor = 120;
+            }
+            
+            const co2Reduction = quantity * co2Factor;
+            const revenue = quantity * revenueFactor;
+            const trees = Math.round(co2Reduction / 0.06); // Aprox. 60kg CO2 por árvore/ano
             
             document.getElementById('co2-reduction').textContent = co2Reduction.toFixed(1) + ' t';
-            document.getElementById('revenue-generated').textContent = 'R$ ' + revenue.toFixed(2);
+            document.getElementById('revenue-generated').textContent = 'R$ ' + revenue.toFixed(0);
+            document.getElementById('trees-equivalent').textContent = trees;
             
             document.getElementById('impact-results').style.display = 'block';
         });
+        
+        // Inicializar
+        window.addEventListener('load', handleHashChange);
+        window.addEventListener('hashchange', handleHashChange);
         
         // Inicializar simulador com valores padrão
         document.getElementById('calculate-impact').click();
